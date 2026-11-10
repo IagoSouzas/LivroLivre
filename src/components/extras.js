@@ -104,3 +104,27 @@ export function BarraSuperior({ children }) {
 }
 
 export const estiloCampo = { backgroundColor: COR_CAMPO, borderWidth: 1, borderColor: COR_BORDA, borderRadius: RAIO, padding: 12, fontSize: 16, color: COR_TEXTO };
+
+// Topo direito do app: nome da pessoa e bolinha com a inicial. Toque abre o Perfil.
+export function AvatarPerfil({ nome, onPress }) {
+  const texto = String(nome || '').trim();
+  const inicial = texto ? texto[0].toUpperCase() : '?';
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`Abrir perfil de ${texto || 'usuário'}`}
+      testID="avatar-perfil"
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginRight: 12 }}
+    >
+      <Text style={{ color: COR_TEXTO, fontWeight: '600', maxWidth: 140 }} numberOfLines={1} testID="avatar-nome">
+        {texto}
+      </Text>
+      <View
+        style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: COR_PRINCIPAL, alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Text style={{ color: COR_FUNDO, fontWeight: '700', fontSize: 16 }} testID="avatar-inicial">{inicial}</Text>
+      </View>
+    </Pressable>
+  );
+}

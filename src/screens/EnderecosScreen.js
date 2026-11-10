@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Botao, Campo, Tela } from '../components/ui';
 import { Card, Aviso, Vazio } from '../components/extras';
+import FormEndereco from '../components/FormEndereco';
 import { listarEnderecos, salvarEndereco, removerEndereco } from '../services/cadastros';
 import { COR_PRINCIPAL, COR_TEXTO, COR_TEXTO_SUAVE } from '../theme';
 
@@ -61,12 +62,7 @@ export default function EnderecosScreen({ navigation }) {
 
         {form ? (
           <View>
-            <Campo rotulo="CEP" keyboardType="numeric" value={form.cep} onChangeText={(v) => setForm({ ...form, cep: v })} erro={erros.cep} testID="end-cep" />
-            <Campo rotulo="Rua" value={form.rua} onChangeText={(v) => setForm({ ...form, rua: v })} erro={erros.rua} testID="end-rua" />
-            <Campo rotulo="Número / Comp." value={form.numero} onChangeText={(v) => setForm({ ...form, numero: v })} erro={erros.numero} testID="end-numero" />
-            <Campo rotulo="Bairro" value={form.bairro} onChangeText={(v) => setForm({ ...form, bairro: v })} erro={erros.bairro} testID="end-bairro" />
-            <Campo rotulo="Cidade" value={form.cidade} onChangeText={(v) => setForm({ ...form, cidade: v })} erro={erros.cidade} testID="end-cidade" />
-            <Campo rotulo="Referência" value={form.referencia} onChangeText={(v) => setForm({ ...form, referencia: v })} testID="end-referencia" />
+            <FormEndereco valor={form} onChange={(patch) => setForm((anterior) => ({ ...anterior, ...patch }))} erros={erros} />
             <Botao titulo="Salvar endereço" onPress={salvar} testID="botao-salvar-endereco" />
             <Botao titulo="Cancelar" variante="secundario" onPress={() => setForm(null)} testID="botao-cancelar-endereco" />
           </View>

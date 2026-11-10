@@ -35,7 +35,9 @@ export default function PerfilScreen({ navigation }) {
 
   return (
     <Tela>
-      <Cabecalho subtitulo="Perfil" />
+      <Pressable onPress={() => navigation.goBack()} accessibilityRole="button" accessibilityLabel="Voltar" testID="voltar">
+        <Text style={{ color: COR_PRINCIPAL, fontSize: 16 }}>← Voltar</Text>
+      </Pressable>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
         <Text style={{ fontSize: 22, fontWeight: '700', color: COR_TEXTO }}>Perfil</Text>
         <Pressable onPress={() => navigation.navigate('EditarPerfil')} accessibilityRole="button" accessibilityLabel="Editar perfil" testID="botao-editar-perfil">

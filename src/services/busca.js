@@ -1,14 +1,7 @@
-// Busca e filtros do catálogo (PRD FR-CAT-01, FR-CAT-02, FR-CAT-03).
-import { buscarMangas, buscarLivros, buscarRpg, CATEGORIAS } from './catalog';
-
-// Termos usados quando não há busca digitada (escolha do desenvolvedor).
-export const TERMOS_PADRAO = {
-  [CATEGORIAS.mangas]: 'one piece',
-  [CATEGORIAS.livros]: 'machado de assis',
-  [CATEGORIAS.rpg]: '',
-};
-
-export const FILTROS_CATEGORIA = ['Todos', CATEGORIAS.mangas, CATEGORIAS.livros, CATEGORIAS.rpg];
+// Busca e filtros do catálogo de livros (PRD FR-CAT-01, FR-CAT-03).
+// O catálogo é interno (src/data/livros.js): não há consulta a API externa.
+import { LIVROS, imagemDoLivro } from '../data/livros';
+import { definirPreco } from '../data/precos';
 
 export const ORDENACOES = [
   { id: 'relevancia', titulo: 'Relevância' },
@@ -16,24 +9,27 @@ export const ORDENACOES = [
   { id: 'preco-desc', titulo: 'Maior preço' },
 ];
 
-// Busca nas APIs da categoria escolhida. Falha de uma fonte não derruba as outras.
-export async function carregarCatalogo(termo = '', categoria = 'Todos') {
-  const t = String(termo).trim();
-  const buscas = [];
-  if (categoria === 'Todos' || categoria === CATEGORIAS.mangas) {
-    buscas.push(buscarMangas(t || TERMOS_PADRAO[CATEGORIAS.mangas]));
-  }
-  if (categoria === 'Todos' || categoria === CATEGORIAS.livros) {
-    buscas.push(buscarLivros(t || TERMOS_PADRAO[CATEGORIAS.livros]));
-  }
-  if (categoria === 'Todos' || categoria === CATEGORIAS.rpg) {
-    buscas.push(buscarRpg(t));
-  }
-  const resultados = await Promise.allSettled(buscas);
-  return {
-    itens: resultados.filter((r) => r.status === 'fulfilled').flatMap((r) => r.value),
-    falhou: resultados.some((r) => r.status === 'rejected'),
-  };
+// Monta os produtos do catálogo com categoria, imagem e preço.
+export function produtosDoCatalogo() {
+  return LIVROS.map((livro) =>
+    definirPreco({
+      id: livro.id,
+      origem: 'interno',
+      categoria: 'Livros',
+      nome: livro.nome,
+      descricao: `Autor: ${livro.autor}`,
+      imagem: imagemDoLivro(livro),
+      preco: null,
+    }),
+  );
+}
+
+// Busca por título ou autor. Sem termo, devolve o catálogo inteiro.
+export async function carregarCatalogo(termo = '') {
+  const alvo = String(termo).trim().toLowerCase();
+  const todos = produtosDoCatalogo();
+  const itens = alvo ? todos.filter((p) => `${p.nome} ${p.descricao}`.toLowerCase().includes(alvo)) : todos;
+  return { itens, falhou: false };
 }
 
 // filtros: { precoMin, precoMax, autor, avaliacaoMin, ordem }

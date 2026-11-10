@@ -14,10 +14,10 @@ export const CATEGORIAS = {
   rpg: 'RPG',
 };
 
-const USER_AGENT = 'LivroLivre/1.0 (IAGO SOUZA)';
-
+// Sem cabeçalhos customizados: no navegador um User-Agent força pré-teste de CORS,
+// e a Open Library recusa esse pré-teste (HTTP 400). Por isso a requisição é GET simples.
 async function buscarJson(fetchImpl, url) {
-  const resposta = await fetchImpl(url, { headers: { 'User-Agent': USER_AGENT } });
+  const resposta = await fetchImpl(url);
   if (!resposta.ok) {
     throw new Error(`Falha na API (HTTP ${resposta.status})`);
   }

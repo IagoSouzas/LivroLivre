@@ -41,7 +41,6 @@ export default function PedidosScreen({ navigation }) {
 
   return (
     <Tela>
-      <Cabecalho subtitulo="Pedidos" />
       <Text style={{ fontSize: 22, fontWeight: '700', color: COR_TEXTO, marginBottom: 8 }}>Meus pedidos</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 8 }}>
         {FILTROS.map((f) => (

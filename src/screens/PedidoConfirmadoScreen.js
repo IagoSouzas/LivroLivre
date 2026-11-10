@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Botao, Tela } from '../components/ui';
 import { Card, Linha } from '../components/extras';
 import { buscarPedido } from '../services/pedidos';
@@ -9,6 +9,11 @@ import { COR_PRINCIPAL, COR_TEXTO, COR_TEXTO_SUAVE, COR_FUNDO } from '../theme';
 // Pedido confirmado (PRD FR-CART-06).
 export default function PedidoConfirmadoScreen({ route, navigation }) {
   const { numero } = route.params;
+
+  // Voltar e continuar comprando levam sempre à página principal (aba Início), limpando o fluxo de compra.
+  function irParaInicio() {
+    navigation.reset({ index: 0, routes: [{ name: 'Abas', params: { screen: 'Início' } }] });
+  }
   const [pedido, setPedido] = useState(null);
 
   useEffect(() => {
@@ -17,6 +22,9 @@ export default function PedidoConfirmadoScreen({ route, navigation }) {
 
   return (
     <Tela>
+      <Pressable onPress={irParaInicio} accessibilityRole="button" accessibilityLabel="Voltar à página principal" testID="voltar">
+        <Text style={{ color: COR_PRINCIPAL, fontSize: 16 }}>← Voltar</Text>
+      </Pressable>
       <View style={{ alignItems: 'center', marginTop: 24 }}>
         <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: '#E8F8F5', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ fontSize: 40, color: COR_PRINCIPAL }}>✓</Text>
@@ -41,7 +49,7 @@ export default function PedidoConfirmadoScreen({ route, navigation }) {
       </Card>
 
       <Botao titulo="Rastrear pedido" onPress={() => navigation.navigate('Rastreamento', { numero })} testID="botao-rastrear" />
-      <Botao titulo="Continuar comprando" variante="secundario" onPress={() => navigation.navigate('Início')} testID="botao-continuar" />
+      <Botao titulo="Continuar comprando" variante="secundario" onPress={irParaInicio} testID="botao-continuar" />
       <View style={{ height: 1, backgroundColor: COR_FUNDO }} />
     </Tela>
   );

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { Tela } from '../components/ui';
 import { Chip, Card, Vazio, Aviso, estiloCampo } from '../components/extras';
-import { carregarCatalogo, filtrarProdutos, FILTROS_CATEGORIA, ORDENACOES } from '../services/busca';
+import { carregarCatalogo, filtrarProdutos, ORDENACOES } from '../services/busca';
 import { listarAvaliacoes, resumoAvaliacoes } from '../services/avaliacoes';
 import { formatarMoeda } from '../services/cart';
 import { COR_CAMPO, COR_PRINCIPAL, COR_TEXTO, COR_TEXTO_SUAVE } from '../theme';
@@ -10,7 +10,6 @@ import { COR_CAMPO, COR_PRINCIPAL, COR_TEXTO, COR_TEXTO_SUAVE } from '../theme';
 // Busca e lista com filtros (PRD FR-CAT-03): preço, autor/marca, avaliação e ordenação.
 export default function BuscaScreen({ navigation }) {
   const [termo, setTermo] = useState('');
-  const [categoria, setCategoria] = useState('Todos');
   const [precoMin, setPrecoMin] = useState('');
   const [precoMax, setPrecoMax] = useState('');
   const [autor, setAutor] = useState('');
@@ -26,7 +25,7 @@ export default function BuscaScreen({ navigation }) {
   useEffect(() => {
     let ativo = true;
     setCarregando(true);
-    Promise.all([carregarCatalogo(termo, categoria), listarAvaliacoes()]).then(([{ itens: novos, falhou }, avaliacoes]) => {
+    Promise.all([carregarCatalogo(termo), listarAvaliacoes()]).then(([{ itens: novos, falhou }, avaliacoes]) => {
       if (!ativo) return;
       const mapa = {};
       const porProduto = {};
@@ -44,7 +43,7 @@ export default function BuscaScreen({ navigation }) {
     return () => {
       ativo = false;
     };
-  }, [categoria, buscaRealizada]);
+  }, [buscaRealizada]);
 
   const exibidos = useMemo(
     () => filtrarProdutos(itens, { precoMin, precoMax, autor, avaliacaoMin, ordem }, medias),
@@ -76,11 +75,6 @@ export default function BuscaScreen({ navigation }) {
         </Pressable>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, marginVertical: 10 }}>
-        {FILTROS_CATEGORIA.map((c) => (
-          <Chip key={c} titulo={c} ativo={c === categoria} onPress={() => setCategoria(c)} testID={`filtro-${c}`} />
-        ))}
-      </ScrollView>
 
       <Card>
         <Text style={{ fontWeight: '700', color: COR_TEXTO, marginBottom: 6 }}>Filtros</Text>
@@ -101,7 +95,14 @@ export default function BuscaScreen({ navigation }) {
         </ScrollView>
       </Card>
 
-      {aviso ? <Aviso texto={aviso} tipo="erro" /> : null}
+      {aviso ? (
+        <View>
+          <Aviso texto={aviso} tipo="erro" />
+          <Pressable onPress={() => setBuscaRealizada((n) => n + 1)} accessibilityRole="button" accessibilityLabel="Tentar novamente" testID="busca-tentar-novamente" style={{ alignSelf: 'flex-start', marginBottom: 8 }}>
+            <Text style={{ color: COR_PRINCIPAL, fontWeight: '600' }}>Tentar novamente</Text>
+          </Pressable>
+        </View>
+      ) : null}
       <Text style={{ color: COR_TEXTO_SUAVE, marginBottom: 6 }} testID="contagem-resultados">{exibidos.length} resultados</Text>
 
       {carregando ? (

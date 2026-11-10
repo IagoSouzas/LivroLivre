@@ -63,7 +63,6 @@ export default function CarrinhoScreen({ navigation }) {
 
   return (
     <Tela>
-      <Cabecalho subtitulo="Carrinho" />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
         <Text style={{ fontSize: 22, fontWeight: '700', color: COR_TEXTO }}>Carrinho</Text>
         <Text style={{ color: COR_TEXTO_SUAVE }} testID="quantidade-total">{totais.quantidadeTotal} itens</Text>

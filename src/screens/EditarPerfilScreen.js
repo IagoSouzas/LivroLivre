@@ -39,7 +39,7 @@ export default function EditarPerfilScreen({ navigation }) {
       </Pressable>
       <Text style={{ fontSize: 22, fontWeight: '700', marginVertical: 8 }}>Editar perfil</Text>
       <Campo rotulo="Nome" value={nome} onChangeText={setNome} erro={erros.nome} testID="campo-nome-perfil" />
-      <Campo rotulo="Telefone" keyboardType="phone-pad" value={telefone} onChangeText={setTelefone} erro={erros.telefone} testID="campo-telefone-perfil" />
+      <Campo rotulo="Telefone" tipo="telefone" value={telefone} onChangeText={setTelefone} erro={erros.telefone} testID="campo-telefone-perfil" />
       {mensagem ? <Aviso texto={mensagem} /> : null}
       <Botao titulo="Salvar" onPress={salvar} testID="botao-salvar-perfil" />
     </Tela>

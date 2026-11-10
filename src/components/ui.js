@@ -1,5 +1,6 @@
 // Componentes visuais compartilhados. Mantêm o mesmo padrão em todas as telas (PRD seção 11).
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { formatarEntrada } from '../services/mascaras';
 import {
   ASSINATURA,
   COR_BORDA,
@@ -38,14 +39,20 @@ export function Cabecalho({ subtitulo }) {
   );
 }
 
-export function Campo({ rotulo, erro, ...props }) {
+// tipo: aplica máscara e aceita só o que o tipo permite (ex.: "cpf", "cep", "numero").
+// editable={false}: campo bloqueado para alteração (ex.: endereço preenchido pelo CEP).
+export function Campo({ rotulo, erro, tipo, editable = true, onChangeText, keyboardType, ...props }) {
+  const aoMudar = (texto) => onChangeText?.(tipo ? formatarEntrada(texto, tipo) : texto);
   return (
     <View style={styles.campoWrapper}>
       <Text style={styles.rotulo}>{rotulo}</Text>
       <TextInput
-        style={[styles.input, erro ? styles.inputErro : null]}
+        style={[styles.input, erro ? styles.inputErro : null, !editable ? styles.inputBloqueado : null]}
         placeholderTextColor={COR_TEXTO_SUAVE}
         accessibilityLabel={rotulo}
+        editable={editable}
+        keyboardType={tipo ? 'number-pad' : keyboardType}
+        onChangeText={aoMudar}
         {...props}
       />
       {erro ? <Text style={styles.textoErro} accessibilityRole="alert">{erro}</Text> : null}
@@ -141,6 +148,10 @@ const styles = StyleSheet.create({
   },
   inputErro: {
     borderColor: COR_ERRO,
+  },
+  inputBloqueado: {
+    backgroundColor: '#E5E7EB',
+    color: COR_TEXTO_SUAVE,
   },
   textoErro: {
     color: COR_ERRO,

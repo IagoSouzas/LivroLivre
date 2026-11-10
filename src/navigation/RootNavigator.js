@@ -4,7 +4,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SessaoContext } from '../context';
+import { SessaoContext, useSessao } from '../context';
 import LoginScreen from '../screens/LoginScreen';
 import CriarContaScreen from '../screens/CriarContaScreen';
 import RecuperarSenhaScreen from '../screens/RecuperarSenhaScreen';
@@ -13,6 +13,8 @@ import BuscaScreen from '../screens/BuscaScreen';
 import CarrinhoScreen from '../screens/CarrinhoScreen';
 import PedidosScreen from '../screens/PedidosScreen';
 import PerfilScreen from '../screens/PerfilScreen';
+import { AvatarPerfil, } from '../components/extras';
+import { Cabecalho } from '../components/ui';
 import ProdutoScreen from '../screens/ProdutoScreen';
 import AvaliacoesScreen from '../screens/AvaliacoesScreen';
 import AvaliarProdutoScreen from '../screens/AvaliarProdutoScreen';
@@ -46,19 +48,23 @@ function PilhaAutenticacao({ onLogin }) {
 }
 
 function Tabs() {
+  const { sessao } = useSessao();
+  const nome = sessao?.usuario?.nome || sessao?.usuario?.username;
   return (
     <Abas.Navigator
-      screenOptions={{
-        headerShown: false,
+      screenOptions={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: () => <Cabecalho />,
+        headerTitleAlign: 'left',
+        headerRight: () => <AvatarPerfil nome={nome} onPress={() => navigation.navigate('Perfil')} />,
         tabBarActiveTintColor: COR_PRINCIPAL,
         tabBarInactiveTintColor: COR_TEXTO_SUAVE,
-      }}
+      })}
     >
       <Abas.Screen name="Início" component={InicioScreen} />
       <Abas.Screen name="Busca" component={BuscaScreen} />
       <Abas.Screen name="Carrinho" component={CarrinhoScreen} />
       <Abas.Screen name="Pedidos" component={PedidosScreen} />
-      <Abas.Screen name="Perfil" component={PerfilScreen} />
     </Abas.Navigator>
   );
 }
@@ -80,6 +86,7 @@ const TELAS_DETALHE = [
   { nome: 'AlterarSenha', componente: AlterarSenhaScreen },
   { nome: 'Enderecos', componente: EnderecosScreen },
   { nome: 'FormasPagamento', componente: FormasPagamentoScreen },
+  { nome: 'Perfil', componente: PerfilScreen },
   { nome: 'Tester', componente: TesterScreen },
 ];
 

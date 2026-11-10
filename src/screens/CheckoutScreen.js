@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Botao, Campo, Tela } from '../components/ui';
 import { Aviso, Chip, Linha, Secao, Card } from '../components/extras';
+import FormEndereco from '../components/FormEndereco';
 import { carregarCarrinho, esvaziarCarrinho } from '../services/carrinho';
 import { calcularCarrinho, formatarMoeda } from '../services/cart';
 import { listarEnderecos, salvarEndereco, validarEndereco, validarCartao } from '../services/cadastros';
@@ -26,6 +27,7 @@ export default function CheckoutScreen({ navigation }) {
   const [enderecos, setEnderecos] = useState([]);
   const [enderecoSelecionado, setEnderecoSelecionado] = useState(null);
   const [novoEndereco, setNovoEndereco] = useState(ENDERECO_VAZIO);
+  const atualizarNovoEndereco = (patch) => setNovoEndereco((anterior) => ({ ...anterior, ...patch }));
   const [mostrarNovo, setMostrarNovo] = useState(false);
   const [errosEndereco, setErrosEndereco] = useState({});
 
@@ -141,12 +143,7 @@ export default function CheckoutScreen({ navigation }) {
               </Pressable>
             ) : (
               <View>
-                <Campo rotulo="CEP" keyboardType="numeric" value={novoEndereco.cep} onChangeText={(v) => setNovoEndereco({ ...novoEndereco, cep: v })} erro={errosEndereco.cep} testID="campo-cep" />
-                <Campo rotulo="Rua" value={novoEndereco.rua} onChangeText={(v) => setNovoEndereco({ ...novoEndereco, rua: v })} erro={errosEndereco.rua} testID="campo-rua" />
-                <Campo rotulo="Número / Comp." value={novoEndereco.numero} onChangeText={(v) => setNovoEndereco({ ...novoEndereco, numero: v })} erro={errosEndereco.numero} testID="campo-numero" />
-                <Campo rotulo="Bairro" value={novoEndereco.bairro} onChangeText={(v) => setNovoEndereco({ ...novoEndereco, bairro: v })} erro={errosEndereco.bairro} testID="campo-bairro" />
-                <Campo rotulo="Cidade" value={novoEndereco.cidade} onChangeText={(v) => setNovoEndereco({ ...novoEndereco, cidade: v })} erro={errosEndereco.cidade} testID="campo-cidade" />
-                <Campo rotulo="Referência" value={novoEndereco.referencia} onChangeText={(v) => setNovoEndereco({ ...novoEndereco, referencia: v })} testID="campo-referencia" />
+                <FormEndereco valor={novoEndereco} onChange={atualizarNovoEndereco} erros={errosEndereco} />
               </View>
             )}
             <Botao titulo="Continuar" onPress={continuarEndereco} testID="botao-continuar-endereco" />
@@ -180,9 +177,9 @@ export default function CheckoutScreen({ navigation }) {
                     <Chip key={n} titulo={`${n}x`} ativo={parcelas === n} onPress={() => setParcelas(n)} testID={`parcelas-${n}`} />
                   ))}
                 </View>
-                <Campo rotulo="Número do cartão" placeholder="0000 0000 0000 0000" keyboardType="numeric" value={cartao.numero} onChangeText={(v) => setCartao({ ...cartao, numero: v })} erro={errosCartao.numero} testID="campo-cartao" />
-                <Campo rotulo="Validade" placeholder="MM/AA" value={cartao.validade} onChangeText={(v) => setCartao({ ...cartao, validade: v })} erro={errosCartao.validade} testID="campo-validade" />
-                <Campo rotulo="CVV" keyboardType="numeric" secureTextEntry value={cartao.cvv} onChangeText={(v) => setCartao({ ...cartao, cvv: v })} erro={errosCartao.cvv} testID="campo-cvv" />
+                <Campo rotulo="Número do cartão" tipo="cartao" placeholder="0000 0000 0000 0000" value={cartao.numero} onChangeText={(v) => setCartao({ ...cartao, numero: v })} erro={errosCartao.numero} testID="campo-cartao" />
+                <Campo rotulo="Validade" tipo="validade" placeholder="MM/AA" value={cartao.validade} onChangeText={(v) => setCartao({ ...cartao, validade: v })} erro={errosCartao.validade} testID="campo-validade" />
+                <Campo rotulo="CVV" tipo="cvv" secureTextEntry value={cartao.cvv} onChangeText={(v) => setCartao({ ...cartao, cvv: v })} erro={errosCartao.cvv} testID="campo-cvv" />
                 <Campo rotulo="Nome no cartão" value={cartao.nome} onChangeText={(v) => setCartao({ ...cartao, nome: v })} erro={errosCartao.nome} testID="campo-nome-cartao" />
               </View>
             ) : (

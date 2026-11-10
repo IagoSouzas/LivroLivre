@@ -96,11 +96,11 @@ const checagens = [
   },
   {
     id: 'catalogo-20',
-    titulo: 'Catálogo com no mínimo 20 produtos (APIs)',
+    titulo: 'Catálogo com no mínimo 20 livros',
     executar: async () => {
-      const { itens } = await carregarCatalogo('', 'Todos');
+      const { itens } = await carregarCatalogo('');
       const ok = itens.length >= 20;
-      return { ok, detalhe: `${itens.length} produtos carregados` };
+      return { ok, detalhe: `${itens.length} livros no catálogo` };
     },
   },
   {

@@ -59,9 +59,9 @@ export default function FormasPagamentoScreen({ navigation }) {
 
         {form ? (
           <>
-            <Campo rotulo="Número do cartão" keyboardType="numeric" value={form.numero} onChangeText={(v) => setForm({ ...form, numero: v })} erro={erros.numero} testID="pag-numero" />
-            <Campo rotulo="Validade" placeholder="MM/AA" value={form.validade} onChangeText={(v) => setForm({ ...form, validade: v })} erro={erros.validade} testID="pag-validade" />
-            <Campo rotulo="CVV" keyboardType="numeric" secureTextEntry value={form.cvv} onChangeText={(v) => setForm({ ...form, cvv: v })} erro={erros.cvv} testID="pag-cvv" />
+            <Campo rotulo="Número do cartão" tipo="cartao" value={form.numero} onChangeText={(v) => setForm({ ...form, numero: v })} erro={erros.numero} testID="pag-numero" />
+            <Campo rotulo="Validade" tipo="validade" placeholder="MM/AA" value={form.validade} onChangeText={(v) => setForm({ ...form, validade: v })} erro={erros.validade} testID="pag-validade" />
+            <Campo rotulo="CVV" tipo="cvv" secureTextEntry value={form.cvv} onChangeText={(v) => setForm({ ...form, cvv: v })} erro={erros.cvv} testID="pag-cvv" />
             <Campo rotulo="Nome no cartão" value={form.nome} onChangeText={(v) => setForm({ ...form, nome: v })} erro={erros.nome} testID="pag-nome" />
             <Botao titulo="Salvar cartão" onPress={salvar} testID="botao-salvar-cartao" />
             <Botao titulo="Cancelar" variante="secundario" onPress={() => setForm(null)} testID="botao-cancelar-cartao" />

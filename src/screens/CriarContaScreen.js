@@ -52,10 +52,10 @@ export default function CriarContaScreen({ navigation }) {
         <Text style={{ fontSize: 24, fontWeight: '700', color: COR_TEXTO, marginBottom: 12 }}>Criar conta</Text>
 
         <Campo rotulo="Nome completo" value={dados.nome} onChangeText={atualizar('nome')} erro={erros.nome} testID="campo-nome" />
-        <Campo rotulo="CPF" placeholder="000.000.000-00" keyboardType="numeric" value={dados.cpf} onChangeText={atualizar('cpf')} erro={erros.cpf} testID="campo-cpf" />
+        <Campo rotulo="CPF" tipo="cpf" placeholder="000.000.000-00" value={dados.cpf} onChangeText={atualizar('cpf')} erro={erros.cpf} testID="campo-cpf" />
         <Campo rotulo="E-mail" placeholder="seu@email.com" autoCapitalize="none" keyboardType="email-address" value={dados.email} onChangeText={atualizar('email')} erro={erros.email} testID="campo-email" />
-        <Campo rotulo="Telefone" placeholder="(11) 99999-9999" keyboardType="phone-pad" value={dados.telefone} onChangeText={atualizar('telefone')} erro={erros.telefone} testID="campo-telefone" />
-        <Campo rotulo="Data de nascimento" placeholder="DD/MM/AAAA" keyboardType="numeric" value={dados.dataNascimento} onChangeText={atualizar('dataNascimento')} erro={erros.dataNascimento} testID="campo-nascimento" />
+        <Campo rotulo="Telefone" tipo="telefone" placeholder="(11) 99999-9999" value={dados.telefone} onChangeText={atualizar('telefone')} erro={erros.telefone} testID="campo-telefone" />
+        <Campo rotulo="Data de nascimento" tipo="data" placeholder="DD/MM/AAAA" value={dados.dataNascimento} onChangeText={atualizar('dataNascimento')} erro={erros.dataNascimento} testID="campo-nascimento" />
         <Campo rotulo="Senha" placeholder="Mínimo 8, com letras e números" secureTextEntry value={dados.senha} onChangeText={atualizar('senha')} erro={erros.senha} testID="campo-senha" />
         <Campo rotulo="Confirmar senha" secureTextEntry value={dados.confirmacaoSenha} onChangeText={atualizar('confirmacaoSenha')} erro={erros.confirmacaoSenha} testID="campo-confirmacao" />
 
